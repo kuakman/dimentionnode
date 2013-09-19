@@ -1,0 +1,9 @@
+# Dimention Node
+################
+
+.DS_Store
+tmp/
+out/
+node_modules/
+.c9revisions/
+npm-debug.log
