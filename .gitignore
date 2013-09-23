@@ -8,3 +8,7 @@ data/
 node_modules/
 .c9revisions/
 npm-debug.log
+application-cov/
+public/coverage
+.nodemonignore
+mongod

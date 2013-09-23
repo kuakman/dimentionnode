@@ -14,12 +14,14 @@
         "backbone": ">=1.0.0",
         "underscore": ">=1.4.x",
 		"underscore.string": ">=2.3.3",
-		"nodemon": ">=0.7.x"
+		"nodemon": ">=0.7.x",
+		"colors": ">=0.6.x"
   },
   "devDependencies": {
         "mocha": ">=1.10.0",
         "should": ">=1.2.2",
-        "jscoverage": ">=0.3.7"
+        "jscoverage": ">=0.3.7",
+        "rimraf": "~2.2.x"
   },
   "engine": "node >=0.10.x"
 }

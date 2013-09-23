@@ -1,5 +1,5 @@
 /**
-*	Class Utils
+*	Class utils
 *	Author: Patricio Ferreira
 **/
 
@@ -24,13 +24,13 @@ var extend = function(protoProps, staticProps) {
 	// (the "constructor" property in your `extend` definition), or defaulted
 	// by us to simply call the parent's constructor.
 	if (protoProps && _.has(protoProps, 'constructor')) {
-        child = protoProps.constructor;
+	  child = protoProps.constructor;
 	} else {
-        child = function(){ return parent.apply(this, arguments); };
+	  child = function(){ return parent.apply(this, arguments); };
 	}
-
-	// Add static properties to the constructor function, if supplied.
-	_.extend(child, parent, staticProps);
+	
+    // Add static properties to the constructor function, if supplied.
+    _.extend(child, parent, staticProps);
 
 	// Set the prototype chain to inherit from `parent`, without calling
 	// `parent`'s constructor function.
@@ -72,10 +72,9 @@ _.extend(Backbone.Base.prototype, Backbone.Events, {
 	 * If any value is passed it replaces the whole attributes object.
 	 */
 	set: function(key, value, opts) {
-
-		opts = (opts) || {};
-		(!_.isUndefined(opts.replaceAll)) || (opts.replaceAll = true);
-
+        opts = (opts) || {};
+        (!_.isUndefined(opts.replaceAll)) || (opts.replaceAll = true);
+        
 		if( _.isObject(key) || key === null) {
 			if (opts.replaceAll) {
 				this.attributes = key;
