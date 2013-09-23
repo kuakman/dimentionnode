@@ -6,9 +6,12 @@
 var fs = require('fs'),
     path = require('path'),
     Backbone = require('backbone'),
+    classUtil = require('../util/class'),
     _ = require('underscore');
     
 var Directory = Backbone.Base.extend({
+    
+    initialize: function() { },
     
     walk: function(dir, exclude) {
         var results = [];
@@ -42,4 +45,4 @@ var Directory = Backbone.Base.extend({
     
 });
 
-module.exports = Directory;
+module.exports = new Directory();

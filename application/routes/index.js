@@ -3,8 +3,13 @@
  * Author: Patricio Ferreira
  **/
  
- var Backbone = require('backbone'),
-    _ = require('undercore');
+ var fs = require('fs'),
+    path = require('path'),
+    Backbone = require('backbone'),
+    classUtil = require('../util/class'),
+    _ = require('underscore'),
+    _s = require('underscore.string'),
+    colors = require('colors');
     
 var Router = Backbone.Base.extend({
   
@@ -19,11 +24,29 @@ var Router = Backbone.Base.extend({
     },
   
     process: function() {
-        
+        if(this.routes) {
+            console.log('Routes for [' + this.name + ']');
+            _.each(this.routes, function(r) {
+                if(this[r.method]) {
+                    console.log((r.key + ' -> ' + r.verb).cyan);
+                    var deps = _.compact(_.map(r.depends, function(m) { 
+                        if(_.isFunction(m)) return m;
+                        return _.bind(this[m], this);
+                    }, this));
+                    this.app[r.verb](r.key, deps, _.bind(this[r.method], this));
+                }
+            }, this);
+        }
     },
   
-    render: function() {
+    render: function(req, res, action, opts) {
+        opts || (opts = {});
         
+        if(!action) throw new Error('\'action\' parameter is required to be able to render the view properly.');
+        if(!opts.viewPath) opts.viewPath = '';
+        
+        var params = _.extend({ action: action, viewPath: opts.viewPath, model: (opts.model) ? opts.model : {} });
+        res.render(opts.viewPath + action, params);
     }
     
 });
@@ -31,8 +54,22 @@ var Router = Backbone.Base.extend({
 /**
  * Process All routers.
  **/
-exports.configure = function(basepath) {
-    
+exports.configure = function(app, basepath) {
+    var files = fs.readdirSync((basepath) ? basepath : __dirname);
+    console.log('Routing for Dimention Node...'.cyan);
+    if(files) {
+        _.each(files, function(f) {
+            if(f.indexOf('.js') != -1) {
+                var rFile = _s.strLeft(f, '.');
+                if(rFile != 'index') {
+                    var RouteClass = new require(__dirname + rFile);
+                    new RouteClass(app, rFile);
+                }
+            } else {
+                console.log("Ignoring File [" + f + "]...".red);
+            }
+        });  
+    }
 };
 
-module.exports = Router;
+exports.Router = Router;

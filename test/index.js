@@ -62,7 +62,6 @@ var UnitTest = _.extend({
     /** Handlers **/
     
     onJSCoverageCompleted: function(error, stdout, stderr) {
-        console.log('Coverage Done.'.underline.yellow);
         console.log('Running Mocha SPEC...'.underline.yellow);
         var files = directory.walk(__dirname);
         var mochaCmd = 'export UNIT_TEST=1; mocha -R spec -c -t 5000 -u bdd ' + files.join(' ');
@@ -71,7 +70,6 @@ var UnitTest = _.extend({
     
     onSpecReportCompleted: function(error, stdout, stderr) {
         console.log(stdout.cyan);
-        console.log('Mocha SPEC Done.'.underline.yellow);
         console.log('Running Mocha HTML-COV...'.underline.yellow);
         var files = directory.walk(__dirname);
         var mochaCmd = 'export UNIT_TEST=1; mocha -R html-cov -c -t 5000 -u bdd ' + files.join(' ') + " --coverage > public/coverage/coverage.html";
@@ -80,12 +78,10 @@ var UnitTest = _.extend({
     
     onProcessCompleted: function(error, stdout, stderr) {
         console.log(stdout.cyan);
-        console.log('Mocha HTML-COV Done.'.underline.yellow);
-        this.callcack();
+        this.callback();
     },
     
     onProcessError: function(wrappedFunc, error, stdout, stderr) {
-        console.log('onProcessError args: ', arguments);
         if(error) {
             console.log(stdout.red);
             process.exit();
