@@ -21,6 +21,8 @@ var Router = Backbone.Base.extend({
         if(!opts.app) throw new Error('Router Class requires an instance of express application to be able to run.');
         if(opts.basePath) this.basePath = opts.basePath;
         this.app = opts.app;
+        
+        this.process();
     },
   
     process: function() {
@@ -62,13 +64,13 @@ exports.configure = function(app, basepath) {
             if(f.indexOf('.js') != -1) {
                 var rFile = _s.strLeft(f, '.');
                 if(rFile != 'index') {
-                    var RouteClass = new require(__dirname + rFile);
-                    new RouteClass(app, rFile);
+                    var RouteClass = new require(__dirname + '/' + rFile);
+                    new RouteClass({ app: app });
                 }
             } else {
                 console.log("Ignoring File [" + f + "]...".red);
             }
-        });  
+        }, this);  
     }
 };
 

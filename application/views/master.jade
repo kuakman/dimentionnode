@@ -1,0 +1,20 @@
+extends layout
+
+block head
+    - var title = _s.capitalize(action);
+    title Dimention - #{title}
+    block meta
+        meta(name="viewport", content="width=device-width, initial-scale=1")
+    block css
+        link(rel='stylesheet', href='/css/bootstrap.min.css')
+        link(rel='stylesheet', href='/css/bootstrap-responsive.min.css')
+        link(rel='shortcut icon', href='/img/favicon.ico')
+    
+div(class="content #{action}")
+    block content
+
+block footer
+    div(class="footer")
+    
+block scripts
+    script(type="text/javascript", src="js/libraries/requirejs/require.js", data-main="/js/initialize.js");

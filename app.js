@@ -3,10 +3,15 @@
  **/
 var http = require('http');
 var path = require('path');
+var exec = require('child_process').exec;
 var express = require('express');
 var Router = require('./application/routes');
 var UnitTest = require('./test');
 var colors = require('colors');
+
+/** Experimental **/
+var cluster = require('cluster');
+var os = require('os');
 
 var _ = require('underscore');
 var _s = require("underscore.string");
@@ -45,7 +50,7 @@ UnitTest.initialize({ app: router }).run(_.bind(function() {
         router.use(express.errorHandler());
     });
     
-    var server = http.createServer(router).listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
+    var server = http.createServer(router).listen(process.env.PORT, process.env.IP, function(){
         var addr = server.address();
         var output = "Dimention Node server listening at " + addr.address + ":" + addr.port;
         console.log(output.blue);

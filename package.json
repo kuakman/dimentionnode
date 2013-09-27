@@ -2,7 +2,7 @@
   "name": "dimention-node",
   "version": "0.0.1",
   "description": "Dimention Node C9.io Testing...",
-  "main": "server.js",
+  "main": "app.js",
   "repository": "",
   "author": "Patricio Ferreira <3dimentionar@gmail.com>",
   "dependencies": {
