@@ -4,8 +4,8 @@
  **/
 
 var config = {
-    enviroments: {
-        dev: {
+    environments: {
+        development: {
             debug: true,
             liveedit: true,
             store: {

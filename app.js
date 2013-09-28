@@ -3,16 +3,12 @@
  **/
 var http = require('http');
 var path = require('path');
-var exec = require('child_process').exec;
 var express = require('express');
+var config = require('./application/config').environments[process.env.NODE_ENV];
 var Router = require('./application/routes');
 var UnitTest = require('./test');
+var LiveEdit = require('./application/modules/liveedit');
 var colors = require('colors');
-
-/** Experimental **/
-var cluster = require('cluster');
-var os = require('os');
-
 var _ = require('underscore');
 var _s = require("underscore.string");
 
@@ -24,7 +20,6 @@ UnitTest.initialize({ app: router }).run(_.bind(function() {
         router.set('views', __dirname + '/application/views');
         router.set('view engine', 'jade');
         
-        router.use(express.logger('dev'));
         router.use(express.compress());
         router.use(express.bodyParser());
         router.use(express.methodOverride());
@@ -42,6 +37,7 @@ UnitTest.initialize({ app: router }).run(_.bind(function() {
     
     router.configure('development', function() {
         console.log('Running on Development Environment...'.blue);
+        router.use(express.logger('dev'));
         router.use(express.errorHandler({ dumExceptions: true, showStack: true }));
     });
     
@@ -50,7 +46,10 @@ UnitTest.initialize({ app: router }).run(_.bind(function() {
         router.use(express.errorHandler());
     });
     
-    var server = http.createServer(router).listen(process.env.PORT, process.env.IP, function(){
+    var server = http.createServer(router).listen(process.env.PORT, process.env.IP, function() {
+        /** LiveEdit **/
+        if(config.liveedit) LiveEdit.launch({ server: server });
+        
         var addr = server.address();
         var output = "Dimention Node server listening at " + addr.address + ":" + addr.port;
         console.log(output.blue);
