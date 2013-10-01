@@ -14,6 +14,11 @@ var config = {
                 db: 'dimention-dev',
                 user: 'kuakman',
                 pass: 'letmein'
+            },
+            mongodb: {
+                autoreconnect: true,
+                poolSize: 5,
+                safe: true
             }
         },
         stage: {
@@ -25,11 +30,18 @@ var config = {
                 db: 'dimention-stage',
                 user: 'kuakman',
                 pass: 'letmein'
+            },
+            mongodb: {
+                autoreconnect: true,
+                poolSize: 5,
+                safe: true
             }
         },
         production: {
             debug: false,
-            liveedit: false
+            liveedit: false,
+            store: { },
+            mongodb: { }
         }
     }
 };

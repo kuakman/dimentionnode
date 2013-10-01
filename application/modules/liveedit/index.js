@@ -30,7 +30,7 @@ var LiveEdit = Backbone.Base.extend({
     },
     
     start: function() {
-        this.io = socketio.listen(this.server);
+        this.io = socketio.listen(this.server, { log: false });
         this.io.configure(_.bind(function() {
             this.io.set('transports', ['websocket', 'xhr-polling', 'flashsocket']);
         }, this));
