@@ -3,12 +3,39 @@
  * Author: Patricio Ferreira
  **/
  
- var path = require('path'), 
-    DBConnector = require('./application/modules/mongodb-connector');
+ var Backbone = require('backbone'),
+    _ = require('underscore'),
+    classUtil = require('./application-cov/util/class'),
+    path = require('path'),
+    colors = require("colors");
  
- exports.build = function(callback) {
-    /** FIXME: Make it recursive **/
-    DBConnector.initialize(path.resolve('application/model/model.js'));
-    callback();
+ var Build = Backbone.Base.extend({
     
+    initialize: function(opts) {
+        opts || (opts = {});
+        
+        if(!opts.callback) throw new Error('Build requires a callback to be able to run.');
+        this.callback = opts.callback;
+        
+        this.build();
+    },
+    
+    /**
+     * 1) Run Sass preprocesor
+     * 2) Build bundles for JS
+     * 3) Ofuscation on JS bundles
+     * 4) Minification on JS Bundles and CSS
+     **/
+    build: function() {
+        this.onBuildComplete();
+    },
+    
+    onBuildComplete: function() {
+        this.callback();
+    }
+    
+});
+ 
+ exports.run = function(callback) {
+    return new Build({ callback: callback });
  };

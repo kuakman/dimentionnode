@@ -8,10 +8,12 @@ var fs = require('fs'),
     exec = require('child_process').exec,
     rimraf = require('rimraf'),
     directory = require(path.resolve('./application/util/directory')),
+    Backbone = require('backbone'),
+    classUtil = require('../application/util/class'),
     _ = require('underscore'),
     colors = require('colors');
     
-var UnitTest = _.extend({
+var UnitTest = Backbone.Base.extend({
     
     basePath: process.cwd(),
     
@@ -27,8 +29,6 @@ var UnitTest = _.extend({
         this.onJSCoverageCompleted = _.wrap(this.onJSCoverageCompleted, _.bind(this.onProcessError, this));
         this.onSpecReportCompleted = _.wrap(this.onSpecReportCompleted, _.bind(this.onProcessError, this));
         this.onProcessCompleted = _.wrap(this.onProcessCompleted, _.bind(this.onProcessError, this));
-        
-        return this;
     },
     
     run: function(callback) {
@@ -54,7 +54,7 @@ var UnitTest = _.extend({
     },
     
     execute: function() {
-        console.log('Building Coverage...'.underline.yellow);
+        console.log('    Building Coverage...'.yellow);
         var jscovCmd = 'jscoverage --no-highlight application application-cov';
         exec(jscovCmd, _.bind(this.onJSCoverageCompleted, this));
     },
@@ -62,7 +62,7 @@ var UnitTest = _.extend({
     /** Handlers **/
     
     onJSCoverageCompleted: function(error, stdout, stderr) {
-        console.log('Running Mocha SPEC...'.underline.yellow);
+        console.log('    Running Mocha SPEC...'.yellow);
         var files = directory.walk(__dirname);
         var mochaCmd = 'export UNIT_TEST=1; mocha -R spec -c -t 5000 -u bdd ' + files.join(' ');
         exec(mochaCmd, _.bind(this.onSpecReportCompleted, this));
@@ -70,14 +70,14 @@ var UnitTest = _.extend({
     
     onSpecReportCompleted: function(error, stdout, stderr) {
         console.log(stdout.cyan);
-        console.log('Running Mocha HTML-COV...'.underline.yellow);
+        console.log('    Running Mocha HTML-COV...'.yellow);
         var files = directory.walk(__dirname);
         var mochaCmd = 'export UNIT_TEST=1; mocha -R html-cov -c -t 5000 -u bdd ' + files.join(' ') + " --coverage > public/coverage/coverage.html";
         exec(mochaCmd, _.bind(this.onProcessCompleted, this));
     },
     
     onProcessCompleted: function(error, stdout, stderr) {
-        console.log(stdout.cyan);
+        console.log('UnitTesting Completed.\n'.cyan);
         this.callback();
     },
     
@@ -91,4 +91,6 @@ var UnitTest = _.extend({
     
 });
 
-module.exports = UnitTest;
+exports.run = function(router, config) {
+    return new UnitTest({ app: router, config: config });
+};

@@ -27,10 +27,10 @@ var Router = Backbone.Base.extend({
   
     process: function() {
         if(this.routes) {
-            console.log('Routes for [' + this.name + ']');
+            console.log(('    Routes for [' + this.name + ']').bold.magenta);
             _.each(this.routes, function(r) {
                 if(this[r.method]) {
-                    console.log((r.key + ' -> ' + r.verb).cyan);
+                    console.log(('        ' + r.key + ' -> ' + r.verb).yellow);
                     var deps = _.compact(_.map(r.depends, function(m) { 
                         if(_.isFunction(m)) return m;
                         return _.bind(this[m], this);
@@ -68,10 +68,11 @@ exports.configure = function(app, basepath) {
                     new RouteClass({ app: app });
                 }
             } else {
-                console.log("Ignoring File [" + f + "]...".red);
+                console.log("    Ignoring File [" + f + "]...".red);
             }
         }, this);  
     }
+    console.log('Routing for Dimention Node Completed.\n'.cyan);
 };
 
 exports.Router = Router;

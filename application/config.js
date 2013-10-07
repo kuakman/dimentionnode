@@ -15,10 +15,14 @@ var config = {
                 user: 'kuakman',
                 pass: 'letmein'
             },
-            mongodb: {
-                autoreconnect: true,
-                poolSize: 5,
-                safe: true
+            dbconnector: {
+                driver: 'mongodb-connector',
+                scanPaths: ['application/models', 'application/services'],
+                options: {
+                    autoreconnect: true,
+                    poolSize: 5,
+                    safe: true       
+                }
             }
         },
         stage: {
@@ -31,17 +35,24 @@ var config = {
                 user: 'kuakman',
                 pass: 'letmein'
             },
-            mongodb: {
-                autoreconnect: true,
-                poolSize: 5,
-                safe: true
+            dbconnector: {
+                driver: 'mongodb-connector',
+                scanPaths: ['application/models', 'application/services'],
+                options: {
+                    autoreconnect: true,
+                    poolSize: 5,
+                    safe: true       
+                }
             }
         },
         production: {
             debug: false,
             liveedit: false,
             store: { },
-            mongodb: { }
+            dbconnector: {
+                driver: 'couchdb-connector',
+                options: { }
+            }
         }
     }
 };

@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Dimention Node C9.io Testing...",
   "main": "app.js",
-  "repository": "",
+  "repository": "https://github.com/kuakman/dimention-node.git",
   "author": "Patricio Ferreira <3dimentionar@gmail.com>",
   "dependencies": {
         "express": "~3.2.x",

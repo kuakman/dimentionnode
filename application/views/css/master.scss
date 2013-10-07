@@ -1,0 +1,10 @@
+@import url(https://fonts.googleapis.com/css?family=News+Cycle:400,700);
+
+$mg: 0;
+$dc: blue;
+
+body {
+    margin: $mg;
+    padding: $mg;
+    background-color: $dc;
+}

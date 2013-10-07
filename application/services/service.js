@@ -3,8 +3,8 @@
  * Author: Patricio Ferreira
  **/
  
- var classUtil = require('../util/class'),
-    Backbone = require('backbone'),
+ var Backbone = require('backbone'), 
+    classUtil = require('../util/class'),
     _ = require('underscore');
     
 var Service = Backbone.Base.extend({
