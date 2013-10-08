@@ -8,10 +8,9 @@
     _ = require('underscore');
 
 /**
- * @Class("Model");
- * @Collection("none");
- * @InheritProperties("true");
- * @InheritMethods("true");
+ * @Class();
+ * @ClassName("Model");
+ * @ClassType("model");
  */
 var Model = Backbone.Base.extend({
     
@@ -36,46 +35,22 @@ var Model = Backbone.Base.extend({
     },
     
     /**
-     * Find all objects in the collection.
-     * @Method("findAll");
-     * @StaticMethod();
-     */ 
-    findAll: function(cb) {
-        
-    },
-    
-    /**
-     * Find object by Id.
-     * @Method("findById");
-     * @StaticMethod();
-     */
-    findById: function(id, cb) {
-        
-    },
-    
-    /**
      * Save the object.
      * @Method("save");
      */
-    save: function(cb) {
-        
-    },
+    save: function(cb) { },
     
     /**
      * Save or Update the object.
      * @Method("saveOrUpdate");
      */
-    saveOrUpdate: function(cb) {
-        
-    },
+    saveOrUpdate: function(cb) { },
     
     /**
      * Remove the Object.
      * @Method("remove");
      */
-    remove: function(cb) {
-        
-    },
+    remove: function(cb) { },
     
     /**
      * 
@@ -92,5 +67,19 @@ var Model = Backbone.Base.extend({
     }
     
 });
+
+/**
+* Find all objects in the collection.
+* @Method("findAll");
+* @StaticMethod();
+*/
+Model.findAll = function(cb) { };
+    
+/**
+ * Find object by Id.
+ * @Method("findById");
+ * @StaticMethod();
+ */
+Model.findById = function(id, cb) { };
 
 module.exports = Model;

@@ -9,6 +9,7 @@
     _ = require('underscore'),
     directory = require('../../util/directory'),
     annotation = require('annotation'),
+    Reader = require('./readers/reader'),
     colors = require('colors');
     
 var MongoDBConnector = Backbone.Base.extend({
@@ -73,8 +74,9 @@ var MongoDBConnector = Backbone.Base.extend({
     onClassParsed: function(p, file, classInfo) {
         try {
             console.log(('       Class [' + file + ']').yellow);
-            if(classInfo) {
-                // TODO Staregy Pattern to read stuff.
+            if(classInfo && classInfo.comments) {
+               var reader = Reader.create(classInfo.comments);
+               reader.parse();
             }
         } catch(ex) {
             console.log(ex.message.red);

@@ -7,6 +7,11 @@
     classUtil = require('../util/class'),
     _ = require('underscore');
     
+/**
+ * @Class();
+ * @ClassName("Service");
+ * @ClassType("service");
+ */ 
 var Service = Backbone.Base.extend({
     
     name: "Service",

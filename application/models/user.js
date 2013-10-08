@@ -8,11 +8,11 @@
     _ = require('underscore');
 
 /**
- * @Class("User");
- * @Collection("users");
+ * @Class();
+ * @ClassName("User");
+ * @ClassType("model");
  * @ExtendClass("Model");
- * @InheritProperties("true");
- * @InheritMethods("true");
+ * @Collection("users");
  */ 
 var User = Model.extend({
     
