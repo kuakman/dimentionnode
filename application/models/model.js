@@ -3,8 +3,7 @@
  * Author: Patricio Ferreira
  **/
  
- var classUtil = require('../util/class'),
-    Backbone = require('backbone'),
+ var Backbone = require('backbone'),
     _ = require('underscore');
 
 /**
@@ -13,8 +12,6 @@
  * @ClassType("model");
  */
 var Model = Backbone.Base.extend({
-    
-    name: "Model",
     
     validators: new Backbone.Collection(),
     
@@ -66,20 +63,30 @@ var Model = Backbone.Base.extend({
         console.log('Deserialize() Called.');
     }
     
-});
-
-/**
-* Find all objects in the collection.
-* @Method("findAll");
-* @StaticMethod();
-*/
-Model.findAll = function(cb) { };
+}, {
     
-/**
- * Find object by Id.
- * @Method("findById");
- * @StaticMethod();
- */
-Model.findById = function(id, cb) { };
+    /** Static Members **/
+    
+    NAME: "Model",
+    
+    /**
+    * Find all objects in the collection.
+    * @Method("findAll");
+    * @StaticMethod();
+    */
+    findAll: function(cb) {
+        
+    },
+   
+    /**
+     * Find object by Id.
+     * @Method("findById");
+     * @StaticMethod();
+     */
+    findById: function(id, cb) {
+        
+    }
+    
+});
 
 module.exports = Model;

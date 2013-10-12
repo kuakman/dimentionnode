@@ -3,15 +3,15 @@
  * Author: Patricio Ferreira
  */
  
- var Model = require('./model'),
-    Backbone = require('backbone'),
-    _ = require('underscore');
+ var Backbone = require('backbone'),
+    _ = require('underscore'),
+    Model = require('./model');
 
 /**
  * @Class();
  * @ClassName("User");
  * @ClassType("model");
- * @ExtendClass("Model");
+ * @SuperClass("Model");
  * @Collection("users");
  */ 
 var User = Model.extend({
@@ -38,6 +38,7 @@ var User = Model.extend({
     password: null,
     
     /**
+     * // TODO: Define: OneToOne - OneToMany - ManyToMany relationships.
      * Property("dreams");
      * type("Dream");
      */ 
@@ -50,4 +51,12 @@ var User = Model.extend({
         User.__super__.initialize.apply(this, arguments);
     }
 
+}, {
+    
+    /** Static Members **/
+    
+    NAME: "User"
+    
 });
+
+module.exports = User;

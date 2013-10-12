@@ -51,16 +51,11 @@ var extend = function(protoProps, staticProps) {
 
 /** Base Class **/
 
-var Base = Backbone.Base = function(attributes) {
-	attributes || (attributes = {});
-	
-	var defaults;
-	if (defaults = getValue(this, 'defaults')) {
-		attributes = _.extend({}, defaults, attributes);
-    }
+var Base = Backbone.Base = function(attr) {
+	attr || (attr = {});
 
-    this.attributes = _.extend({}, attributes);
-	this.set(attributes);
+    this.attributes = _.extend({}, attr);
+	this.set(attr);
     
 	this.initialize.apply(this, arguments);
 };

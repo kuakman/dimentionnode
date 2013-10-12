@@ -5,8 +5,10 @@ var http = require('http');
 var express = require('express');
 var path = require('path');
 var colors = require('colors');
+var Backbone = require('backbone');
 var _ = require('underscore');
 var _s = require("underscore.string");
+var classUtil = require('./application/util/class');
 
 var config = require('./application/config').environments['development']; // c9.io doesn't support environment variables like 'process.env.NODE_ENV'...
 var Router = require('./application/routes');

@@ -24,21 +24,28 @@ var ModelReader = Reader.extend({
      * @Override classes();
      */
     classes: function() {
-        var cs = this.getAnnotation('class');
+        ModelReader.__super__.classes.apply(this, arguments);
     },
     
      /**
      * @Override properties();
      */
     properties: function() {
-        var ps = this.getAnnotation('properties');
+        ModelReader.__super__.properties.apply(this, arguments);
     },
     
      /**
      * @Override methods();
      */
     methods: function() {
-        var ms = this.getAnnotation('methods');
+        ModelReader.__super__.methods.apply(this, arguments);
+    },
+    
+    /**
+     * @Override onClassAdded();
+     */
+    onClassAdded: function(ca, collection, opts) {
+        ModelReader.__super__.onClassAdded.apply(this, arguments);
     }
     
 });

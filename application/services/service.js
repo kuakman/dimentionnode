@@ -3,8 +3,7 @@
  * Author: Patricio Ferreira
  **/
  
- var Backbone = require('backbone'), 
-    classUtil = require('../util/class'),
+ var Backbone = require('backbone'),
     _ = require('underscore');
     
 /**
