@@ -51,16 +51,11 @@ var extend = function(protoProps, staticProps) {
 
 /** Base Class **/
 
-var Base = Backbone.Base = function(attributes) {
-	attributes || (attributes = {});
-	
-	var defaults;
-	if (defaults = getValue(this, 'defaults')) {
-		attributes = _.extend({}, defaults, attributes);
-    }
-
-    this.attributes = _.extend({}, attributes);
-	this.set(attributes);
+var Base = Backbone.Base = function(attr) {
+	attr || (attr = {});
+    
+    this.attributes = _.extend({}, attr);
+	this.set(attr);
     
 	this.initialize.apply(this, arguments);
 };
@@ -92,6 +87,13 @@ _.extend(Backbone.Base.prototype, Backbone.Events, {
 	 */
 	get: function(key) { 
 		return (_.isUndefined(key)) ? this.attributes : this.attributes[key];
+	},
+	
+	/**
+	 * To Override in the subclasses
+	 */
+	_validate: function(attrs, options) {
+        return true;
 	}
 });
 

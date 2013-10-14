@@ -6,6 +6,7 @@
 var config = {
     environments: {
         development: {
+            skipTest: true,
             debug: true,
             liveedit: true,
             store: {
@@ -26,6 +27,7 @@ var config = {
             }
         },
         stage: {
+            skipTest: false,
             debug: true,
             liveedit: false,
             store: {
@@ -46,6 +48,7 @@ var config = {
             }
         },
         production: {
+            skipTest: false,
             debug: false,
             liveedit: false,
             store: { },

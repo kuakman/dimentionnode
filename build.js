@@ -5,7 +5,6 @@
  
  var Backbone = require('backbone'),
     _ = require('underscore'),
-    classUtil = require('./application-cov/util/class'),
     path = require('path'),
     colors = require("colors");
  

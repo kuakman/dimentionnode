@@ -4,7 +4,6 @@
  */
  
  var Backbone = require('backbone'),
-    classUtil = require('../util/class'),
     _ = require('underscore'),
     path = require('path'),
     colors = require('colors');

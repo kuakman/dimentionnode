@@ -16,6 +16,8 @@ var MongoDBConnector = Backbone.Base.extend({
     
     paths: [],
     
+    reader: null,
+    
     initialize: function(opts) {
         opts || (opts = {});
         if(opts.callback) this.callback = opts.callback;
@@ -69,14 +71,16 @@ var MongoDBConnector = Backbone.Base.extend({
     
     /**
      * Class Parsed Handler.
+     * @param p {Object}
+     * @param file {String}
      * @param classInfo {AnnotationReader}
      */
     onClassParsed: function(p, file, classInfo) {
         try {
             console.log(('       Class [' + file + ']').yellow);
             if(classInfo && classInfo.comments) {
-               var reader = Reader.create(classInfo.comments);
-               reader.parse();
+               this.reader = Reader.create({ path: (p.path + "/"), file: file, annotations: classInfo.comments });
+               this.reader.parse();
             }
         } catch(ex) {
             console.log(ex.message.red);

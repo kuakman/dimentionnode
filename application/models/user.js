@@ -3,41 +3,42 @@
  * Author: Patricio Ferreira
  */
  
- var Model = require('./model'),
-    Backbone = require('backbone'),
-    _ = require('underscore');
+ var Backbone = require('backbone'),
+    _ = require('underscore'),
+    Model = require('./model');
 
 /**
  * @Class();
  * @ClassName("User");
  * @ClassType("model");
- * @ExtendClass("Model");
+ * @SuperClass("Model");
  * @Collection("users");
  */ 
 var User = Model.extend({
     
     /**
      * @Property("username");
-     * @type("String");
-     * @validator({ "type": "maxlength", "value": "40" });
+     * @PropertyType("String");
+     * @Validator({ "type": "maxlength", "value": "40" });
      */
     username: "",
     
     /**
      * @Property("email");
-     * @type("String");
-     * @validator({ "type": "email" });
+     * @PropertyType("String");
+     * @Validator({ "type": "email" });
      */ 
     email: "",
     
     /**
      * @Property("password");
-     * @type("Password");
+     * @PropertyType("Password");
      * @OneToOne({ "key": "id" });
      */
     password: null,
     
     /**
+     * // TODO: Define: OneToOne - OneToMany - ManyToMany relationships.
      * Property("dreams");
      * type("Dream");
      */ 
@@ -50,4 +51,12 @@ var User = Model.extend({
         User.__super__.initialize.apply(this, arguments);
     }
 
+}, {
+    
+    /** Static Members **/
+    
+    NAME: "User"
+    
 });
+
+module.exports = User;

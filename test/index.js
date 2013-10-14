@@ -7,10 +7,9 @@ var fs = require('fs'),
     path = require('path'),
     exec = require('child_process').exec,
     rimraf = require('rimraf'),
-    directory = require(path.resolve('./application/util/directory')),
     Backbone = require('backbone'),
-    classUtil = require('../application/util/class'),
     _ = require('underscore'),
+    directory = require(path.resolve('./application/util/directory')),
     colors = require('colors');
     
 var UnitTest = Backbone.Base.extend({
@@ -22,6 +21,7 @@ var UnitTest = Backbone.Base.extend({
         
         if(!opts.app) throw new Error('UnitTest class requires a reference to the application \'app\'.');
         if(opts.basePath) this.basePath = opts.basePath;
+        if(opts.config.skipTest) this.skip = opts.config.skipTest;
         
         this.app = opts.app;
         
@@ -32,7 +32,8 @@ var UnitTest = Backbone.Base.extend({
     },
     
     run: function(callback) {
-        if(process.env.NODE_SKIP_TEST === true) {
+        if(this.skip) {
+            console.log('Skipping Unit Testing...'.yellow);
             callback();
             return;
         } else {
@@ -55,7 +56,8 @@ var UnitTest = Backbone.Base.extend({
     
     execute: function() {
         console.log('    Building Coverage...'.yellow);
-        var jscovCmd = 'jscoverage --no-highlight application application-cov';
+        // FIXME: Exclude list for JScoverage
+        var jscovCmd = 'jscoverage --no-highlight application application-cov --exclude ./application/util/class.js,./application/util/directory.js';
         exec(jscovCmd, _.bind(this.onJSCoverageCompleted, this));
     },
     
@@ -63,17 +65,25 @@ var UnitTest = Backbone.Base.extend({
     
     onJSCoverageCompleted: function(error, stdout, stderr) {
         console.log('    Running Mocha SPEC...'.yellow);
-        var files = directory.walk(__dirname);
-        var mochaCmd = 'export UNIT_TEST=1; mocha -R spec -c -t 5000 -u bdd ' + files.join(' ');
-        exec(mochaCmd, _.bind(this.onSpecReportCompleted, this));
+        var files = directory.walk(__dirname, [__filename]);
+        if(files.length > 0) {
+            var mochaCmd = 'export UNIT_TEST=1; mocha -R spec -c -t 5000 -u bdd ' + files.join(' ');
+            exec(mochaCmd, _.bind(this.onSpecReportCompleted, this));
+        } else {
+            this.onSpecReportCompleted(null, 'No Unit Test found.', '');
+        }
     },
     
     onSpecReportCompleted: function(error, stdout, stderr) {
-        console.log(stdout.cyan);
+        console.log(('    ' + stdout).magenta);
         console.log('    Running Mocha HTML-COV...'.yellow);
-        var files = directory.walk(__dirname);
-        var mochaCmd = 'export UNIT_TEST=1; mocha -R html-cov -c -t 5000 -u bdd ' + files.join(' ') + " --coverage > public/coverage/coverage.html";
-        exec(mochaCmd, _.bind(this.onProcessCompleted, this));
+        var files = directory.walk(__dirname, [__filename]);
+        if(files.length > 0) {
+            var mochaCmd = 'export UNIT_TEST=1; mocha -R html-cov -c -t 5000 -u bdd ' + files.join(' ') + " --coverage > public/coverage/coverage.html";
+            exec(mochaCmd, _.bind(this.onProcessCompleted, this));
+        } else {
+            this.onProcessCompleted(null, '', '');
+        }
     },
     
     onProcessCompleted: function(error, stdout, stderr) {

@@ -6,7 +6,6 @@
  var fs = require('fs'),
     path = require('path'),
     Backbone = require('backbone'),
-    classUtil = require('../util/class'),
     _ = require('underscore'),
     _s = require('underscore.string'),
     colors = require('colors');
