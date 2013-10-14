@@ -17,7 +17,6 @@ var ClassAnnotation = Backbone.Base.extend({
      * Constructor
      */
     initialize: function() {
-        console.log("Data: ", this);
         if(!this.get('data')) throw new Error('ClassAnnotation requires the annotationClass structure to be able to work.');
         if(!this.get('path') || !this.get('reader')) throw new Error('ClassAnnotation requires a path and a reader to be able to perform a lookup.');
         
@@ -29,8 +28,9 @@ var ClassAnnotation = Backbone.Base.extend({
     
     parse: function() {
         _.each(this.get('data'), function(c) {
-            if(_.contains(ClassAnnotation.annotations, c.key.toLowerCase())) {
-                this.set(c.key.toLowerCase(), this["do" + _s.camelize(c.key)](c.value));
+            var key = _s.capitalize(c.key.toLowerCase());
+            if(_.contains(ClassAnnotation.annotations, key)) {
+                this.set(c.key.toLowerCase(), this["set" + key](c.value));
             }
         }, this);
     },
@@ -38,7 +38,7 @@ var ClassAnnotation = Backbone.Base.extend({
     /**
      * Process ClassName Attribute.
      */
-    doClassName: function(value) {
+    setClassname: function(value) {
         var ModelClass = this.get('reader').findClass(value.toLowerCase(), this.get('path'));
         return require(ModelClass);
     },
@@ -46,14 +46,12 @@ var ClassAnnotation = Backbone.Base.extend({
     /**
      * Process ClassType Attribute.
      */
-    doClassType: function(value) {
-        return value;
-    },
+    setClasstype: function(value) { return value; },
     
     /**
      * Process SuperClass Attribute.
      */
-    doSuperClass: function(value) {
+    setSuperclass: function(value) {
         var SuperClass = this.get('reader').findClass(value.toLowerCase(), this.get('path'));
         return require(SuperClass);
     },
@@ -61,19 +59,17 @@ var ClassAnnotation = Backbone.Base.extend({
     /**
      * Process Collection Attribute.
      */
-    doCollection: function(value) {
-        return value;
-    }
+    setCollection: function(value) { return value; }
     
 }, {
     
     NAME: 'ClassAnnotation',
     
     annotations: [
-       'classname',
-       'classtype',
-       'superclass',
-       'collection'
+       'Classname',
+       'Classtype',
+       'Superclass',
+       'Collection'
     ],
     
 });

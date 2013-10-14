@@ -53,7 +53,7 @@ var extend = function(protoProps, staticProps) {
 
 var Base = Backbone.Base = function(attr) {
 	attr || (attr = {});
-
+    
     this.attributes = _.extend({}, attr);
 	this.set(attr);
     
@@ -87,6 +87,13 @@ _.extend(Backbone.Base.prototype, Backbone.Events, {
 	 */
 	get: function(key) { 
 		return (_.isUndefined(key)) ? this.attributes : this.attributes[key];
+	},
+	
+	/**
+	 * To Override in the subclasses
+	 */
+	_validate: function(attrs, options) {
+        return true;
 	}
 });
 

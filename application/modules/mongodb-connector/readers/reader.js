@@ -30,8 +30,6 @@ var Reader = Backbone.Base.extend({
      */
     parse: function() {
         this.classes();
-        this.properties();
-        this.methods();
     },
     
     /**
@@ -39,10 +37,10 @@ var Reader = Backbone.Base.extend({
      */
     classes: function() {
         try {
-            var ca = new ClassAnnotation({ data: this.getAnnotation('class'), path: this.get('path'), reader: Reader });
-            this.get('cs').add(ca);
+            this.get('cs').add({ data: this.getAnnotation('class'), path: this.get('path'), reader: Reader });
         } catch(ex) {
             console.log(ex.message.bold.red);
+            process.exit();
         }
     },
     
@@ -51,9 +49,12 @@ var Reader = Backbone.Base.extend({
      */
     properties: function(ca) {
         try {
-            //ca.get('properties').add(new PropertyAnnotation({ data: this.getAnnotation('properties'), reader: Reader }));
+            _.each(_.keys(this.getAnnotation('properties')), function(prop) {
+                ca.get('properties').add({ data: this.getAnnotation('properties')[prop], name: prop, reader: Reader });
+            }, this);
         } catch(ex) {
             console.log(ex.message.bold.red);
+            process.exit();
         }
     },
     
@@ -62,9 +63,12 @@ var Reader = Backbone.Base.extend({
      */
     methods: function(ca) {
         try {
-            //ca.get('methods').add(new MethodAnnotation({ data: this.getAnnotation('methods'), reader: Reader }));
+            _.each(_.keys(this.getAnnotation('methods')), function(prop) {
+                ca.get('methods').add({ data: this.getAnnotation('methods')[prop], name: prop, reader: Reader });
+            }, this);
         } catch(ex) {
             console.log(ex.message.bold.red);
+            process.exit();
         }
     },
     
@@ -89,6 +93,7 @@ var Reader = Backbone.Base.extend({
    
     /**
      * Factory Method - Creates a Type of Reader
+     * TODO: Improve Factory Method
      */
     create: function(opts) {
         var ClassInfo = _.find(opts.annotations.class, function(a) { if(a.key.toLowerCase() == 'classtype') return (a.value.toLowerCase() == 'model' || a.value.toLowerCase() == 'service'); });

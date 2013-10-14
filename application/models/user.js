@@ -18,21 +18,21 @@ var User = Model.extend({
     
     /**
      * @Property("username");
-     * @type("String");
-     * @validator({ "type": "maxlength", "value": "40" });
+     * @PropertyType("String");
+     * @Validator({ "type": "maxlength", "value": "40" });
      */
     username: "",
     
     /**
      * @Property("email");
-     * @type("String");
-     * @validator({ "type": "email" });
+     * @PropertyType("String");
+     * @Validator({ "type": "email" });
      */ 
     email: "",
     
     /**
      * @Property("password");
-     * @type("Password");
+     * @PropertyType("Password");
      * @OneToOne({ "key": "id" });
      */
     password: null,
