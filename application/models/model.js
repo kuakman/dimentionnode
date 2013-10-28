@@ -8,16 +8,15 @@
 
 /**
  * @Class();
- * @ClassName("Model");
  * @ClassType("model");
+ * @ClassDef({ "class": "Model" });
  */
 var Model = Backbone.Base.extend({
     
     validators: new Backbone.Collection(),
     
     /**
-     * @Property("id");
-     * @type("ObjectID");
+     * @Property({ "name": "id", "type": "ObjectID" });
      */
     id: "",
     
@@ -33,19 +32,19 @@ var Model = Backbone.Base.extend({
     
     /**
      * Save the object.
-     * @Method("save");
+     * @Method({ "name": "save" });
      */
     save: function(cb) { },
     
     /**
      * Save or Update the object.
-     * @Method("saveOrUpdate");
+     * @Method({ "name": "saveOrUpdate" });
      */
     saveOrUpdate: function(cb) { },
     
     /**
      * Remove the Object.
-     * @Method("remove");
+     * @Method({ "name": "remove" });
      */
     remove: function(cb) { },
     
@@ -71,8 +70,7 @@ var Model = Backbone.Base.extend({
     
     /**
     * Find all objects in the collection.
-    * @Method("findAll");
-    * @StaticMethod();
+    * @Method({ "name": "findAll", "static": "true" });
     */
     findAll: function(cb) {
         
@@ -80,8 +78,7 @@ var Model = Backbone.Base.extend({
    
     /**
      * Find object by Id.
-     * @Method("findById");
-     * @StaticMethod();
+     * @Method({ "name": "findById", "static": "false" });
      */
     findById: function(id, cb) {
         

@@ -9,30 +9,25 @@
 
 /**
  * @Class();
- * @ClassName("User");
  * @ClassType("model");
- * @SuperClass("Model");
- * @Collection("users");
+ * @ClassDef({ "class": "User", "superclass": "Model", "collection": "users" });
  */ 
 var User = Model.extend({
     
     /**
-     * @Property("username");
-     * @PropertyType("String");
+     * @Property({ "name": "username", "type": "string" });
      * @Validator({ "type": "maxlength", "value": "40" });
      */
     username: "",
     
     /**
-     * @Property("email");
-     * @PropertyType("String");
+     * @Property({ "name": "email", "type": "string" });
      * @Validator({ "type": "email" });
      */ 
     email: "",
     
     /**
-     * @Property("password");
-     * @PropertyType("Password");
+     * @Property({ "name": "password", "type": "Password" });
      * @OneToOne({ "key": "id" });
      */
     password: null,

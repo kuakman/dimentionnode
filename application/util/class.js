@@ -69,6 +69,7 @@ _.extend(Backbone.Base.prototype, Backbone.Events, {
 	set: function(key, value, opts) {
         opts = (opts) || {};
         (!_.isUndefined(opts.replaceAll)) || (opts.replaceAll = true);
+        this.previous = { key: key, value: this.attributes[key] };
         
 		if( _.isObject(key) || key === null) {
 			if (opts.replaceAll) {
@@ -87,6 +88,13 @@ _.extend(Backbone.Base.prototype, Backbone.Events, {
 	 */
 	get: function(key) { 
 		return (_.isUndefined(key)) ? this.attributes : this.attributes[key];
+	},
+	
+	/**
+	 * Returns if an attributes has changed since the last set.
+	 */
+	hasChanged: function(key, value) {
+        return (this.previous[key] != value);
 	},
 	
 	/**

@@ -3,7 +3,7 @@
  * Author: Patricio Ferreira
  */
  
- var mongo = require('mongoskin'),
+ var Annotation = require('./annotation'),
     Backbone = require('backbone'),
     _ = require('underscore'),
     _s = require('underscore.string');
@@ -11,12 +11,14 @@
 var PropertyAnnotation = require('./propertyAnnotation'),
     MethodAnnotation = require('./methodAnnotation');
     
-var ClassAnnotation = Backbone.Base.extend({
+var ClassAnnotation = Annotation.extend({
     
     /**
      * Constructor
      */
     initialize: function() {
+        ClassAnnotation.__super__.initialize.apply(this, arguments);
+        
         if(!this.get('data')) throw new Error('ClassAnnotation requires the annotationClass structure to be able to work.');
         if(!this.get('path') || !this.get('reader')) throw new Error('ClassAnnotation requires a path and a reader to be able to perform a lookup.');
         
@@ -28,48 +30,49 @@ var ClassAnnotation = Backbone.Base.extend({
     
     parse: function() {
         _.each(this.get('data'), function(c) {
-            var key = _s.capitalize(c.key.toLowerCase());
+            var key = c.key.toLowerCase();
             if(_.contains(ClassAnnotation.annotations, key)) {
-                this.set(c.key.toLowerCase(), this["set" + key](c.value));
+                this.set(key, c.value);
             }
         }, this);
     },
     
     /**
-     * Process ClassName Attribute.
+     * Process ClassDef Attribute.
      */
-    setClassname: function(value) {
-        var ModelClass = this.get('reader').findClass(value.toLowerCase(), this.get('path'));
-        return require(ModelClass);
+    onClassdef: function(annotation) {
+        if(annotation.superclass) this.onSuperClass(annotation.superclass);
+        if(annotation.class) this.onClass(annotation.class);
+        if(annotation.collection) this.onCollection(annotation.collection);
     },
     
     /**
-     * Process ClassType Attribute.
+     * SuperClass Definition
      */
-    setClasstype: function(value) { return value; },
-    
-    /**
-     * Process SuperClass Attribute.
-     */
-    setSuperclass: function(value) {
-        var SuperClass = this.get('reader').findClass(value.toLowerCase(), this.get('path'));
-        return require(SuperClass);
+    onSuperClass: function(superclass) {
+        this.attributes['superclass'] = require(this.get('reader').findClass(superclass.toLowerCase(), this.get('path')));
     },
     
     /**
-     * Process Collection Attribute.
+     * Class Definition
      */
-    setCollection: function(value) { return value; }
+    onClass: function(clazz) {
+        this.attributes['class'] = require(this.get('reader').findClass(clazz.toLowerCase(), this.get('path')));
+    },
+    
+    /**
+     * Collection Definition
+     */
+    onCollection: function(collection) {
+        this.attributes['collection'] = collection;
+    }
     
 }, {
     
     NAME: 'ClassAnnotation',
     
     annotations: [
-       'Classname',
-       'Classtype',
-       'Superclass',
-       'Collection'
+        'classdef'
     ],
     
 });

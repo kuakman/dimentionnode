@@ -17,7 +17,7 @@ var config = {
                 pass: 'letmein'
             },
             dbconnector: {
-                driver: 'mongodb-connector',
+                engine: 'mongodb',
                 scanPaths: ['application/models', 'application/services'],
                 options: {
                     autoreconnect: true,
@@ -38,7 +38,6 @@ var config = {
                 pass: 'letmein'
             },
             dbconnector: {
-                driver: 'mongodb-connector',
                 scanPaths: ['application/models', 'application/services'],
                 options: {
                     autoreconnect: true,
