@@ -1,5 +1,16 @@
 ##################
-# dimention-node #
+# Dimention-node #
 ##################
 
-Dimention Node / C9.io
+Dimention Node stack
+
+- Express
+- Jade
+- Socket.IO
+- Mongoskin
+- MongoDB
+- Mocka
+- JSCoverage
+- BackboneJS
+
+Example Project to test Nodebernate
