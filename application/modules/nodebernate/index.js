@@ -9,10 +9,10 @@
     _ = require('underscore'),
     directory = require('../../util/directory'),
     annotation = require('annotation'),
-    Reader = require('./readers/reader'),
+    Reader = require('./readers'),
     colors = require('colors');
-    
-var MongoDBConnector = Backbone.Base.extend({
+
+var Nodebernate = Backbone.Base.extend({
     
     paths: [],
     
@@ -20,7 +20,9 @@ var MongoDBConnector = Backbone.Base.extend({
     
     initialize: function(opts) {
         opts || (opts = {});
+        if(opts.config) this.config = opts.config;
         if(opts.callback) this.callback = opts.callback;
+        Reader.createConnector(this.config);
     },
         
     /**
@@ -79,8 +81,12 @@ var MongoDBConnector = Backbone.Base.extend({
         try {
             console.log(('       Class [' + file + ']').yellow);
             if(classInfo && classInfo.comments) {
-               this.reader = Reader.create({ path: (p.path + "/"), file: file, annotations: classInfo.comments });
-               this.reader.parse();
+                this.reader = Reader.create({ config: this.config, path: (p.path + "/"), file: file, annotations: classInfo.comments });
+                if(this.reader) {
+                    this.reader.parse();
+                } else {
+                    console.log('ReaderType was not found. Skipping class...'.bold.red);
+                }
             }
         } catch(ex) {
             console.log(ex.message.red);
@@ -96,4 +102,4 @@ var MongoDBConnector = Backbone.Base.extend({
     
 });
 
-module.exports = MongoDBConnector;
+module.exports = Nodebernate;

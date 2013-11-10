@@ -8,12 +8,10 @@
     
 /**
  * @Class();
- * @ClassName("Service");
  * @ClassType("service");
+ * @ClassDef({ "class": "Service" })
  */ 
 var Service = Backbone.Base.extend({
-    
-    name: "Service",
     
     initialize: function(opts) {
         opts || (opts = {});
@@ -21,6 +19,10 @@ var Service = Backbone.Base.extend({
         if(!opts.name) throw new Error('Service requires a \'name\' to be able to be instantiated.');
         this.name = opts.name;
     }
+    
+}, {
+    
+    NAME: "Service"
     
 });
 

@@ -6,7 +6,8 @@
  var Backbone = require('backbone'),
     _ = require('underscore'),
     path = require('path'),
-    colors = require('colors');
+    colors = require('colors'),
+    Nodebernate = require('./nodebernate');
     
 var Store = Backbone.Base.extend({
     
@@ -31,17 +32,16 @@ var Store = Backbone.Base.extend({
      * Set Up DBConnector
      */
     configure: function() {
-        if(this.config.dbconnector.driver) {
-            var DriverClass = require(path.resolve(this.basePath + this.config.dbconnector.driver));
+        if(this.config.dbconnector) {
             if(this.config.dbconnector.scanPaths && this.config.dbconnector.scanPaths.length > 0) {
-                var driver = new DriverClass({ callback: _.bind(this.onComplete, this) });
+                var driver = new Nodebernate({ config: this.config, callback: _.bind(this.onComplete, this) });
                 driver.scan(this.config.dbconnector.scanPaths);
             } else {
-                console.log('ScanPaths was not specified for driver [' + this.config.dbconnector.driver + '] - Ignoring...'.red);
+                console.log('ScanPaths were not specified for Nodebernate - Ignoring...'.red);
                 this.callback();
             }
         } else {
-            console.log('Driver not found in config file - Ignoring...'.red);
+            console.log('DBConnector not found - Ignoring...'.red);
             this.callback();
         }
     },

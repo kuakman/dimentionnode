@@ -3,9 +3,9 @@
  * Author: Patricio Ferreira
  */
  
- var Reader = require('./reader'),
-    Backbone = require('backbone'),
-    _ = require('underscore');
+ var Reader = require('./'),
+    _ = require('underscore'),
+    _s = require('underscore.string');
     
 var ModelReader = Reader.extend({
     

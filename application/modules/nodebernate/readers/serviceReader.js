@@ -3,7 +3,7 @@
  * Author: Patricio Ferreira
  */
  
- var Reader = require('./reader'),
+ var Reader = require('./'),
     Backbone = require('backbone'),
     _ = require('underscore');
     

@@ -10,20 +10,24 @@ var config = {
             debug: true,
             liveedit: true,
             store: {
-                host: process.env.IP,
-                port: process.env.PORT,
-                db: 'dimention-dev',
-                user: 'kuakman',
-                pass: 'letmein'
-            },
-            dbconnector: {
-                driver: 'mongodb-connector',
-                scanPaths: ['application/models', 'application/services'],
+                authentication: {
+                    db: 'dimention-dev',
+                    user: 'kuakman',
+                    pass: 'letmein'
+                },
+                replicaSet: {
+                    host: process.env.IP,
+                    port: process.env.PORT
+                },
                 options: {
                     autoreconnect: true,
                     poolSize: 5,
-                    safe: true       
+                    safe: true
                 }
+            },
+            dbconnector: {
+                engine: 'mongodb',
+                scanPaths: ['application/models', 'application/services']
             }
         },
         stage: {
@@ -31,20 +35,21 @@ var config = {
             debug: true,
             liveedit: false,
             store: {
-                host: process.env.IP,
-                port: process.env.PORT,
-                db: 'dimention-stage',
-                user: 'kuakman',
-                pass: 'letmein'
-            },
-            dbconnector: {
-                driver: 'mongodb-connector',
-                scanPaths: ['application/models', 'application/services'],
-                options: {
+                replicaSet: {
+                    host: process.env.IP,
+                    port: process.env.PORT,
                     autoreconnect: true,
-                    poolSize: 5,
+                    poolSize: 5
+                },
+                options: {
+                    db: 'dimention-dev',
+                    user: 'kuakman',
+                    pass: 'letmein',
                     safe: true       
                 }
+            },
+            dbconnector: {
+                scanPaths: ['application/models', 'application/services']
             }
         },
         production: {

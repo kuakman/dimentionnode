@@ -9,25 +9,20 @@
     _s = require('underscore.string'),
     colors = require('colors');
     
-var ClassAnnotation = require('../annotations/classAnnotation'),
-    PropertyAnnotation = require('../annotations/propertyAnnotation'),
-    MethodAnnotation = require('../annotations/methodAnnotation');
-    
 var Reader = Backbone.Base.extend({
     
     initialize: function() {
-        
+        if(!this.get('config')) throw new Error('Readers require a config attribute to be able to work.');
         if(!this.get('annotations')) throw new Error('Readers require an annotation attribute to be able to work.');
         if(!this.get('path')) throw new Error('Readers require a path attribute to be able to work.');
         if(!this.get('file')) throw new Error("Readers require a file attribute to be able to work.");
-        
-        this.set('cs', new Backbone.Collection([], { model: ClassAnnotation })),
-        this.get('cs').on('add', _.bind(this.onClassAdded, this));
+        this.set('cs', new Backbone.Collection([], { model: require('../annotations/classAnnotation') })),
+        this.get('cs').on('add', this.onClassAdded, this);
     },
     
     /**
      * Parse annotation information for a specific type of reader.
-     */
+     **/
     parse: function() {
         this.classes();
     },
@@ -37,7 +32,7 @@ var Reader = Backbone.Base.extend({
      */
     classes: function() {
         try {
-            this.get('cs').add({ data: this.getAnnotation('class'), path: this.get('path'), reader: Reader });
+            this.get('cs').add({ data: this.getAnnotation('class'), reader: this });
         } catch(ex) {
             console.log(ex.message.bold.red);
             process.exit();
@@ -50,7 +45,7 @@ var Reader = Backbone.Base.extend({
     properties: function(ca) {
         try {
             _.each(_.keys(this.getAnnotation('properties')), function(prop) {
-                ca.get('properties').add({ data: this.getAnnotation('properties')[prop], name: prop, reader: Reader });
+                ca.get('properties').add({ class: ca, data: this.getAnnotation('properties')[prop], name: prop, reader: this });
             }, this);
         } catch(ex) {
             console.log(ex.message.bold.red);
@@ -64,7 +59,7 @@ var Reader = Backbone.Base.extend({
     methods: function(ca) {
         try {
             _.each(_.keys(this.getAnnotation('methods')), function(prop) {
-                ca.get('methods').add({ data: this.getAnnotation('methods')[prop], name: prop, reader: Reader });
+                ca.get('methods').add({ class: ca, data: this.getAnnotation('methods')[prop], name: prop, reader: this });
             }, this);
         } catch(ex) {
             console.log(ex.message.bold.red);
@@ -89,16 +84,37 @@ var Reader = Backbone.Base.extend({
     
 }, {
    
-    /** Static Members **/
-   
     /**
      * Factory Method - Creates a Type of Reader
-     * TODO: Improve Factory Method
+     * @static
+     * @returns {Reader}
      */
     create: function(opts) {
-        var ClassInfo = _.find(opts.annotations.class, function(a) { if(a.key.toLowerCase() == 'classtype') return (a.value.toLowerCase() == 'model' || a.value.toLowerCase() == 'service'); });
-        var ClassType = (ClassInfo) ? require('./' + ClassInfo.value.toLowerCase() + 'Reader') : Reader;
-        return new ClassType(opts);
+        var definition = _.find(opts.annotations.class, function(a) { return (a.key.toLowerCase() == 'classtype'); }, this);
+        if(definition && definition.value) {
+            try {
+                var Clazz = require('./' + definition.value.toLowerCase() + 'Reader');
+                return new Clazz(opts);
+            } catch(ex) {
+                console.log(ex.message.bold.red);
+                process.exit();
+            }
+        }
+        return null;
+    },
+    
+    /**
+     * Create Connector
+     * @static
+     * @param config {Object}
+     */
+    createConnector: function(config) {
+        try {
+            require('../sessions/' + config.dbconnector.engine.toLowerCase());
+        } catch(ex) {
+            console.log(('Error while building Connector Session: ' + ex.message).bold.red);
+            process.exit();
+        }
     },
     
     /**
