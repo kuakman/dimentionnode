@@ -9,9 +9,9 @@
     _ = require('underscore'),
     directory = require('../../util/directory'),
     annotation = require('annotation'),
-    Reader = require('./readers/reader'),
+    Reader = require('./readers'),
     colors = require('colors');
-    
+
 var Nodebernate = Backbone.Base.extend({
     
     paths: [],
@@ -22,6 +22,7 @@ var Nodebernate = Backbone.Base.extend({
         opts || (opts = {});
         if(opts.config) this.config = opts.config;
         if(opts.callback) this.callback = opts.callback;
+        Reader.createConnector(this.config);
     },
         
     /**

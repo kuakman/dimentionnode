@@ -9,11 +9,29 @@ var Backbone = require('backbone'),
 var Session = Backbone.Base.extend({
     
     /**
+     * Connector Object.
+     */
+    connector: null,
+    
+    /**
      * Constructor
      */
     initialize: function() {
+        this.validate();
+        this.parse();
         this.set('currentSession', null);
+        this.set('connected', false);
     },
+    
+    /**
+     * Validate configuration object.
+     */
+    validate: function() { },
+    
+    /**
+     * Parse config object.
+     */
+    parse: function() { },
     
     /**
      * Open new Session connection.
@@ -28,7 +46,9 @@ var Session = Backbone.Base.extend({
     /**
      * Returns true if current session to the DB is opened, otherwise false.
      */
-    isSessionOpened: function() { },
+    isSessionOpened: function() {
+        return this.get('connected');
+    },
     
     /**
      * Returns the current Session reference.

@@ -13,7 +13,17 @@ var Annotation = Backbone.Base.extend({
     /**
      * Constructor
      */
-    initialize: function() { },
+    initialize: function() {
+        this.validate();
+    },
+    
+    /**
+     * Validate annotation attributes
+     */
+    validate: function() {
+        if(!this.get('data')) throw new Error('ClassAnnotation requires the annotationClass structure to be able to work.');
+        if(!this.get('reader')) throw new Error('ClassAnnotation requires a reader to be able to perform a lookup.');
+    },
     
     /**
      * Parse Annotation

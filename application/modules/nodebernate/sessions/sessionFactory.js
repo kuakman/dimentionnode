@@ -5,8 +5,7 @@
  * Description: Polymorphic Factory Class.
  */
  
- var Session = require('./session'), 
-    Backbone = require('backbone'),
+ var Backbone = require('backbone'),
     _ = require('underscore');
     
 var SessionFactory = Backbone.Base.extend({
@@ -17,7 +16,7 @@ var SessionFactory = Backbone.Base.extend({
     
     NAME: 'SessionFactory',
     
-    factories: new Backbone.Collection(),
+    factories: new Backbone.Collection([]),
     
     addFactory: function(Factory) {
         var f = SessionFactory.factories.findWhere({ type: Factory.NAME });
@@ -27,8 +26,7 @@ var SessionFactory = Backbone.Base.extend({
     createSession: function(type, config) {
         var Factory = SessionFactory.factories.findWhere({ type: type });
         if(!Factory) throw new Error('Unsupported SessionType. Session Factory not found for the SessionType');
-        Session.config = config;
-        return Factory.get('class').create();
+        return Factory.get('class').create(_.extend({}, config));
     }
     
 });

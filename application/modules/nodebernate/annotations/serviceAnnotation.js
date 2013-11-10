@@ -13,6 +13,7 @@ var ServiceAnnotation = Annotation.extend({
      */
     initialize: function() {
         ServiceAnnotation.__super__.initialize.apply(this, arguments);
+        this.parse();
     },
     
     /**

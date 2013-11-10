@@ -3,7 +3,7 @@
  * Author: Patricio Ferreira
  */
  
- var Reader = require('./reader'),
+ var Reader = require('./'),
     _ = require('underscore'),
     _s = require('underscore.string');
     
@@ -45,7 +45,6 @@ var ModelReader = Reader.extend({
      * @Override onClassAdded();
      */
     onClassAdded: function(ca, collection, opts) {
-        ca.set('session', this.get('session'));
         ModelReader.__super__.onClassAdded.apply(this, arguments);
     }
     

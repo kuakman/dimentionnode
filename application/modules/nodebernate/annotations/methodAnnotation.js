@@ -11,10 +11,6 @@ var MethodAnnotation = Annotation.extend({
     
     initialize: function() {
         MethodAnnotation.__super__.initialize.apply(this, arguments);
-        
-        if(!this.get('data')) throw new Error('ClassAnnotation requires the annotationClass structure to be able to work.');
-        if(!this.get('reader')) throw new Error('ClassAnnotation requires a reader to be able to perform a lookup.');
-        
         this.parse();
     },
     

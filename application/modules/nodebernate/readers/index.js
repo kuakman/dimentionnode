@@ -4,14 +4,10 @@
  */
  
  var directory = require('../../../util/directory'),
-    path = require('path'),
     Backbone = require('backbone'),
     _ = require('underscore'),
     _s = require('underscore.string'),
-    SessionFactory = require('../sessions/sessionFactory'),
     colors = require('colors');
-    
-var ClassAnnotation = require('../annotations/classAnnotation');
     
 var Reader = Backbone.Base.extend({
     
@@ -20,18 +16,8 @@ var Reader = Backbone.Base.extend({
         if(!this.get('annotations')) throw new Error('Readers require an annotation attribute to be able to work.');
         if(!this.get('path')) throw new Error('Readers require a path attribute to be able to work.');
         if(!this.get('file')) throw new Error("Readers require a file attribute to be able to work.");
-        
-        this.set('cs', new Backbone.Collection([], { model: ClassAnnotation })),
-        this.get('cs').on('add', _.bind(this.onClassAdded, this));
-        
-        try {
-            var connector = this.get('config').dbconnector.engine.toLowerCase();
-            require('../sessions/' + connector);
-            this.set('session', SessionFactory.createSession(_s.capitalize(connector + 'Session'), this.get('config').dbconnector.options));
-        } catch(ex) {
-            console.log(('Error while injecting Session: ' + ex.message).bold.red);
-            process.exit();
-        }
+        this.set('cs', new Backbone.Collection([], { model: require('../annotations/classAnnotation') })),
+        this.get('cs').on('add', this.onClassAdded, this);
     },
     
     /**
@@ -46,7 +32,7 @@ var Reader = Backbone.Base.extend({
      */
     classes: function() {
         try {
-            this.get('cs').add({ data: this.getAnnotation('class'), path: this.get('path'), reader: Reader });
+            this.get('cs').add({ data: this.getAnnotation('class'), reader: this });
         } catch(ex) {
             console.log(ex.message.bold.red);
             process.exit();
@@ -59,7 +45,7 @@ var Reader = Backbone.Base.extend({
     properties: function(ca) {
         try {
             _.each(_.keys(this.getAnnotation('properties')), function(prop) {
-                ca.get('properties').add({ class: ca, data: this.getAnnotation('properties')[prop], name: prop, reader: Reader });
+                ca.get('properties').add({ class: ca, data: this.getAnnotation('properties')[prop], name: prop, reader: this });
             }, this);
         } catch(ex) {
             console.log(ex.message.bold.red);
@@ -73,7 +59,7 @@ var Reader = Backbone.Base.extend({
     methods: function(ca) {
         try {
             _.each(_.keys(this.getAnnotation('methods')), function(prop) {
-                ca.get('methods').add({ class: ca, data: this.getAnnotation('methods')[prop], name: prop, reader: Reader });
+                ca.get('methods').add({ class: ca, data: this.getAnnotation('methods')[prop], name: prop, reader: this });
             }, this);
         } catch(ex) {
             console.log(ex.message.bold.red);
@@ -98,10 +84,10 @@ var Reader = Backbone.Base.extend({
     
 }, {
    
-    /** Static Members **/
-   
     /**
      * Factory Method - Creates a Type of Reader
+     * @static
+     * @returns {Reader}
      */
     create: function(opts) {
         var definition = _.find(opts.annotations.class, function(a) { return (a.key.toLowerCase() == 'classtype'); }, this);
@@ -115,6 +101,20 @@ var Reader = Backbone.Base.extend({
             }
         }
         return null;
+    },
+    
+    /**
+     * Create Connector
+     * @static
+     * @param config {Object}
+     */
+    createConnector: function(config) {
+        try {
+            require('../sessions/' + config.dbconnector.engine.toLowerCase());
+        } catch(ex) {
+            console.log(('Error while building Connector Session: ' + ex.message).bold.red);
+            process.exit();
+        }
     },
     
     /**
